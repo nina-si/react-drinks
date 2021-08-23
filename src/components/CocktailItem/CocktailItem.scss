@@ -1,0 +1,16 @@
+.cocktail-item {
+  width: 280px;
+  margin: 1rem;
+  padding: 0.5rem;
+  background-color: #373b69;
+  border-radius: 10px;
+  transition: 0.3s all ease-out;
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 7px 12px 7px rgba(243, 212, 212, 0.2);
+  }
+  & .cocktailImg {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+}

@@ -1,0 +1,37 @@
+.cocktail-card-name {
+  color: #fff;
+}
+
+.cocktail-card-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 90vw;
+  margin: 0 auto;
+  & .cocktail-picture {
+    width: 36vw;
+    padding: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #373b69;
+    & img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+  & .cocktail-info {
+    width: 36vw;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #373b69;
+    & h3,
+    & .cocktail-ingredients,
+    & p {
+      color: #fff;
+    }
+    & .cocktail-ingredients {
+      list-style: none;
+      padding: 0;
+    }
+  }
+}
