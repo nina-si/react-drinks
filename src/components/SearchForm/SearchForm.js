@@ -16,12 +16,13 @@ import { drinkSelected } from "../../actions";
 // };
 
 class SearchForm extends Component {
-  // handleFocus: FocusEventHandler<HTMLAnchorElement> | undefined;
   constructor(props) {
     super(props);
+    this.timer = null;
     this.state = {
       enteredValue: "",
       isSearchStarted: false,
+      isDropDownShown: false,
       searchResults: [],
     };
   }
@@ -48,21 +49,32 @@ class SearchForm extends Component {
   async searchInputChangeHandler(event) {
     const enteredText = event.target.value;
     this.setState({ enteredValue: enteredText });
+    
     if (enteredText.trim().length > 2) {
+      this.handleSearchTimer.bind(this);
       this.setState({ isSearchStarted: true });
       this.getDrinkByName(enteredText);
     } else {
       this.setState({
-        enteredValue: "",
         isSearchStarted: false,
+        isDropDownShown: false,
         searchResults: [],
       });
     }
   }
 
-  clearSearchInput() {
-    document.getElementById('search').value="";
+  componentDidUpdate (prevProps, prevState) {
+    if(prevState.enteredValue !== this.state.enteredValue) {
+      this.handleSearchTimer();
+    }
   }
+  
+  handleSearchTimer () {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.setState({isDropDownShown: true});
+    }, 1000);
+  }  
 
   autocompleteClickHandler(event) {
     this.props.drinkSelected(event.target.attributes.dataid.value);
@@ -70,8 +82,13 @@ class SearchForm extends Component {
     this.setState({
       enteredValue: "",
       isSearchStarted: false,
+      isDropDownShown: false,
       searchResults: [],
     });
+  }
+  
+  clearSearchInput() {
+    document.getElementById('search').value="";
   }
 
   render() {
@@ -101,12 +118,12 @@ class SearchForm extends Component {
           className="search-input"
           onChange={this.searchInputChangeHandler.bind(this)}
         />
-        {this.state.isSearchStarted && !this.state.searchResults && (
+        {this.state.isDropDownShown && !this.state.searchResults && (
           <ul className="autocomplete">
             <li>No cocktail found</li>
           </ul>
         )}
-        {this.state.searchResults && this.state.searchResults.length > 0 && (
+        {this.state.isDropDownShown && this.state.searchResults && (
           <ul className="autocomplete">{searchResultItems}</ul>
         )}
       </form>
