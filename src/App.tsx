@@ -16,13 +16,7 @@ function App() {
           <Header />
           <Switch>
             <Route path="/" exact component={Cocktails} />
-            <Route
-              path="/:id"
-              render={({ match }) => {
-                const { id } = match.params;
-                return <CocktailCard id={id} />;
-              }}
-            />
+            <Route path="/:id" component={CocktailCard} />
           </Switch>
         </div>
       </Router>

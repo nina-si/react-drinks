@@ -6,13 +6,15 @@ import { drinkSelected } from "../../actions";
 
 import "./CocktailItem.scss";
 
-type ItemProps = {
+type PropsFromRedux = typeof mapDispatchToProps;
+
+interface ItemProps extends PropsFromRedux {
   idDrink: string;
   strDrinkThumb: string;
   strDrink: string;
 };
 
-class CocktailItem extends Component {
+class CocktailItem extends Component<ItemProps>{
   name: string;
   img: string;
   id: string;
@@ -34,7 +36,6 @@ class CocktailItem extends Component {
         to={`/${this.id}`}
         className="cocktail-item"
         onClick={this.cardClickHandler.bind(this)}
-        dataid={this.id}
       >
         <img src={`${this.img}`} alt={this.name} className="cocktailImg" />
         <h3>{this.name}</h3>

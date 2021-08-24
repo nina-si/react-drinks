@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SearchForm from "../Search/SearchForm/SearchForm";
+import SearchForm from '../SearchForm/SearchForm'
 import { Link } from "react-router-dom";
 
 import "./Header.scss";

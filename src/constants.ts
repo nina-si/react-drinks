@@ -6,3 +6,5 @@ export const SEARCH_COCKTAIL_ENDPOINT =
 
 export const GET_COCKTAIL_INFO_ENDPOINT =
   "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
+
+export const DRINK_SELECTED = 'DRINK_SELECTED';

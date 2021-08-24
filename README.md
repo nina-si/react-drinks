@@ -1,2 +1,3 @@
 ## Deploy:
-https://react-beverages.netlify.app/14588
+
+https://react-beverages.netlify.app
