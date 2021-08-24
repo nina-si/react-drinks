@@ -5,12 +5,14 @@ import { GET_COCKTAIL_INFO_ENDPOINT } from "../../constants";
 import { drinkSelected } from "../../actions";
 
 import "./CocktailCard.scss";
+import { ISelectedDrink } from "../../types";
 
 type CardProps = {
   id: string;
 };
 
 type CardState = {
+  id: string;
   name: string;
   imgUrl: string;
   description: string;
@@ -18,11 +20,12 @@ type CardState = {
 };
 
 class CocktailCard extends Component<CardProps, CardState> {
-  id: string;
+  private _isMounted: boolean;
   constructor(props: CardProps) {
     super(props);
-    this.id = props.id;
+    this._isMounted = false;
     this.state = {
+      id: props.id,
       name: "",
       imgUrl: "",
       description: "",
@@ -31,7 +34,8 @@ class CocktailCard extends Component<CardProps, CardState> {
   }
 
   componentDidMount() {
-    fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.id}`)
+    this._isMounted = true;
+    fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.props.id}`)
       .then((res) => res.json())
       .then((data) =>
         this.setState({
@@ -55,7 +59,8 @@ class CocktailCard extends Component<CardProps, CardState> {
   }
 
   componentDidUpdate() {
-    fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.id}`)
+    this._isMounted = true;
+    fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.props.id}`)
       .then((res) => res.json())
       .then((data) =>
         this.setState({
@@ -77,29 +82,8 @@ class CocktailCard extends Component<CardProps, CardState> {
         })
       );
   }
-
-  UNSAFE_componentWillUpdate() {
-    fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.id}`)
-      .then((res) => res.json())
-      .then((data) =>
-        this.setState({
-          name: data.drinks[0].strDrink,
-          imgUrl: data.drinks[0].strDrinkThumb,
-          description: data.drinks[0].strInstructions,
-          ingredients: [
-            data.drinks[0].strIngredient1,
-            data.drinks[0].strIngredient2,
-            data.drinks[0].strIngredient3,
-            data.drinks[0].strIngredient4,
-            data.drinks[0].strIngredient5,
-            data.drinks[0].strIngredient6,
-            data.drinks[0].strIngredient7,
-            data.drinks[0].strIngredient8,
-            data.drinks[0].strIngredient9,
-            data.drinks[0].strIngredient10,
-          ],
-        })
-      );
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
@@ -126,7 +110,7 @@ class CocktailCard extends Component<CardProps, CardState> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ISelectedDrink) => {
   return { id: state.selectedDrinkId };
 };
 

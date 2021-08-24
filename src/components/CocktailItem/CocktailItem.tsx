@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, ReactComponentElement } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { drinkSelected } from "../../actions";
 
 import "./CocktailItem.scss";
+import { ISelectDrink } from "../../types";
 
 type ItemProps = {
   idDrink: string;
@@ -12,7 +13,7 @@ type ItemProps = {
   strDrink: string;
 };
 
-class CocktailItem extends Component {
+class CocktailItem extends Component<ItemProps>{
   name: string;
   img: string;
   id: string;
@@ -25,7 +26,7 @@ class CocktailItem extends Component {
   }
 
   cardClickHandler() {
-    this.props.drinkSelected(this.id);
+    drinkSelected(this.id);
   }
 
   render() {
@@ -34,7 +35,6 @@ class CocktailItem extends Component {
         to={`/${this.id}`}
         className="cocktail-item"
         onClick={this.cardClickHandler.bind(this)}
-        dataid={this.id}
       >
         <img src={`${this.img}`} alt={this.name} className="cocktailImg" />
         <h3>{this.name}</h3>
@@ -47,4 +47,4 @@ const mapDispatchToProps = {
   drinkSelected,
 };
 
-export default connect(null, mapDispatchToProps)(CocktailItem);
+export default connect<null, any, ItemProps>(null, mapDispatchToProps)(CocktailItem);

@@ -5,9 +5,14 @@ import CocktailItem from "../CocktailItem/CocktailItem";
 import "./Cocktails.scss";
 
 type CocktailsProps = {};
-type CocktailsState = { cocktailsData: [] };
+type CocktailsState = { cocktailsData: Array<CocktailsItem> | [] };
+type CocktailsItem = {
+  idDrink: string;
+  strDrinkThumb: string;
+  strDrink: string;
+}
 
-class Cocktails extends Component<{ CocktailsProps: any; CocktailsState }> {
+class Cocktails extends Component<CocktailsProps, CocktailsState > {
   constructor(props: CocktailsProps) {
     super(props);
     this.state = {

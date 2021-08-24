@@ -1,6 +1,9 @@
-const drinkSelected = (drinkId: string) => {
+import { DRINK_SELECTED } from "../constants";
+import { ISelectDrink } from "../types";
+
+const drinkSelected = (drinkId: string):ISelectDrink => {
   return {
-    type: "DRINK_SELECTED",
+    type: DRINK_SELECTED,
     payload: drinkId,
   };
 };

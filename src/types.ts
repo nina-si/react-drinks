@@ -1,8 +1,14 @@
+import { DRINK_SELECTED } from './constants';
+
 //Store
 
-export type SelectedDrink = string;
+export interface ISelectedDrink {
+  selectedDrinkId: string,
+}
+
+//Actions
 
 export interface ISelectDrink {
-  type: string;
+  type: typeof DRINK_SELECTED;
   payload: string;
 }

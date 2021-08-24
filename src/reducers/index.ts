@@ -1,14 +1,15 @@
-import { combineReducers } from "redux";
+import { DRINK_SELECTED } from "../constants";
+import { ISelectedDrink, ISelectDrink } from "../types";
 
 const initialState = {
   selectedDrinkId: "",
 };
 
-const reducer = (state = initialState, action: { type: any; payload: any }) => {
-  switch (action.type) {
-    case "DRINK_SELECTED":
+const reducer = (state = initialState, { type, payload}:ISelectDrink):ISelectedDrink => {
+  switch (type) {
+    case DRINK_SELECTED:
       return {
-        selectedDrinkId: action.payload,
+        selectedDrinkId: payload,
       };
     default:
       return state;
