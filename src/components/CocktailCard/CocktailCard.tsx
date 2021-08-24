@@ -62,7 +62,7 @@ class CocktailCard extends Component<CardProps, CardState> {
     this._isMounted = true;
     fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${this.props.id}`)
       .then((res) => res.json())
-      .then((data) =>
+      .then((data) => {
         this.setState({
           name: data.drinks[0].strDrink,
           imgUrl: data.drinks[0].strDrinkThumb,
@@ -79,17 +79,19 @@ class CocktailCard extends Component<CardProps, CardState> {
             data.drinks[0].strIngredient9,
             data.drinks[0].strIngredient10,
           ],
-        })
-      );
+        });
+      });
   }
   componentWillUnmount() {
     this._isMounted = false;
   }
 
   render() {
-    const cocktailIngredients = this.state.ingredients
-      .filter((ingredient) => ingredient !== null)
-      .map((item) => <li key={item}>{item}</li>);
+    const ingredientsList = [...this.state.ingredients]
+      .filter((ingredient) => ingredient !== null && ingredient !== "")
+      .map((item) => {
+        return <li key={item}>{item}</li>;
+      });
 
     return (
       <div>
@@ -100,7 +102,7 @@ class CocktailCard extends Component<CardProps, CardState> {
           </div>
           <div className="cocktail-info">
             <h3>Ingredients:</h3>
-            <ul className="cocktail-ingredients">{cocktailIngredients}</ul>
+            <ul className="cocktail-ingredients">{ingredientsList}</ul>
             <h3>Description:</h3>
             <p>{this.state.description}</p>
           </div>

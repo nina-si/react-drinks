@@ -60,18 +60,19 @@ class SearchForm extends Component {
     }
   }
 
+  clearSearchInput() {
+    document.getElementById('search').value="";
+  }
+
   autocompleteClickHandler(event) {
     this.props.drinkSelected(event.target.attributes.dataid.value);
+    this.clearSearchInput();
     this.setState({
       enteredValue: "",
       isSearchStarted: false,
       searchResults: [],
     });
   }
-
-  // inputBlurHandler(event) {
-  //   event.target.value = "";
-  // }
 
   render() {
     let searchResultItems;
@@ -99,7 +100,6 @@ class SearchForm extends Component {
           id="search"
           className="search-input"
           onChange={this.searchInputChangeHandler.bind(this)}
-          // onBlur={this.inputBlurHandler.bind(this)}
         />
         {this.state.isSearchStarted && !this.state.searchResults && (
           <ul className="autocomplete">

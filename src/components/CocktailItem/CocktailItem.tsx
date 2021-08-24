@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 import { drinkSelected } from "../../actions";
 
 import "./CocktailItem.scss";
-import { ISelectDrink } from "../../types";
 
-type ItemProps = {
+type PropsFromRedux = typeof mapDispatchToProps;
+
+interface ItemProps extends PropsFromRedux {
   idDrink: string;
   strDrinkThumb: string;
   strDrink: string;
@@ -26,7 +27,7 @@ class CocktailItem extends Component<ItemProps>{
   }
 
   cardClickHandler() {
-    drinkSelected(this.id);
+    this.props.drinkSelected(this.id);
   }
 
   render() {
@@ -47,4 +48,4 @@ const mapDispatchToProps = {
   drinkSelected,
 };
 
-export default connect<null, any, ItemProps>(null, mapDispatchToProps)(CocktailItem);
+export default connect(null, mapDispatchToProps)(CocktailItem);
