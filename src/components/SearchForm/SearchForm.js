@@ -131,7 +131,7 @@ class SearchForm extends Component {
           onChange={this.searchInputChangeHandler.bind(this)}
         />
         {this.state.isDropDownShown && !this.state.searchResults && (
-          <ul className="autocomplete">
+          <ul className="autocomplete" ref={this.searchRef}>
             <li>No cocktail found</li>
           </ul>
         )}
