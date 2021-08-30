@@ -5,20 +5,13 @@ import { connect } from "react-redux";
 import "./SearchForm.scss";
 
 import { SEARCH_COCKTAIL_ENDPOINT } from "../../constants";
-import { drinkSelected } from "../../actions";
-
-// type SearchState = {
-//   enteredValue: string;
-//   isSearchStarted: boolean;
-//   searchResults?:
-//     | [{ strDrink: string; strDrinkThumb: string; idDrink: string }]
-//     | [];
-// };
+import { drinkSelected } from "../../actions/select-drink";
 
 class SearchForm extends Component {
   constructor(props) {
     super(props);
     this.timer = null;
+    this.searchRef = React.createRef();
     this.state = {
       enteredValue: "",
       isSearchStarted: false,
@@ -35,23 +28,21 @@ class SearchForm extends Component {
           this.setState({ searchResults: [] });
           return;
         } else {
-          const results = data.drinks.map(
-            (drink) => {
-              return { id: drink.idDrink, name: drink.strDrink };
-            }
-          );
+          const results = data.drinks.map((drink) => {
+            return { id: drink.idDrink, name: drink.strDrink };
+          });
           return results;
         }
       })
       .then((results) => this.setState({ searchResults: results }));
   }
 
-  async searchInputChangeHandler(event) {
-    const enteredText = event.target.value;
+  searchInputChangeHandler = async (e) => {
+    const enteredText = e.target.value;
     this.setState({ enteredValue: enteredText });
-    
+
     if (enteredText.trim().length > 2) {
-      this.handleSearchTimer.bind(this);
+      this.handleSearchTimer();
       this.setState({ isSearchStarted: true });
       this.getDrinkByName(enteredText);
     } else {
@@ -61,23 +52,36 @@ class SearchForm extends Component {
         searchResults: [],
       });
     }
-  }
+  };
 
-  componentDidUpdate (prevProps, prevState) {
-    if(prevState.enteredValue !== this.state.enteredValue) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.enteredValue !== this.state.enteredValue) {
       this.handleSearchTimer();
     }
   }
-  
-  handleSearchTimer () {
+
+  handleSearchTimer = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.setState({isDropDownShown: true});
+      this.setState({ isDropDownShown: true });
+      this.shiftFocus();
     }, 1000);
-  }  
+  }
 
-  autocompleteClickHandler(event) {
-    this.props.drinkSelected(event.target.attributes.dataid.value);
+  shiftFocus() {
+    const node = this.searchRef.current;
+    node.addEventListener("keydown", (e) => {
+      const active = document.activeElement;
+      if (e.keyCode === 40 && active.nextSibling) {
+        active.nextSibling.focus();
+      } else if (e.keyCode === 38 && active.previousSibling) {
+        active.previousSibling.focus();
+      }
+    });
+  }
+
+  autocompleteClickHandler = (e) => {
+    this.props.drinkSelected(e.target.attributes.dataid.value);
     this.clearSearchInput();
     this.setState({
       enteredValue: "",
@@ -86,9 +90,9 @@ class SearchForm extends Component {
       searchResults: [],
     });
   }
-  
+
   clearSearchInput() {
-    document.getElementById('search').value="";
+    this.setState({enteredValue: ""});
   }
 
   render() {
@@ -101,7 +105,7 @@ class SearchForm extends Component {
             className="autocomplete-item"
             key={result.id}
             dataid={result.id}
-            onClick={this.autocompleteClickHandler.bind(this)}
+            onClick={this.autocompleteClickHandler}
           >
             {result.name}
           </Link>
@@ -115,16 +119,19 @@ class SearchForm extends Component {
           type="search"
           placeholder={`Type cocktail name here, i.e. margarita`}
           id="search"
+          value={this.state.enteredValue}
           className="search-input"
-          onChange={this.searchInputChangeHandler.bind(this)}
+          onChange={this.searchInputChangeHandler}
         />
         {this.state.isDropDownShown && !this.state.searchResults && (
-          <ul className="autocomplete">
+          <ul className="autocomplete" ref={this.searchRef}>
             <li>No cocktail found</li>
           </ul>
         )}
         {this.state.isDropDownShown && this.state.searchResults && (
-          <ul className="autocomplete">{searchResultItems}</ul>
+          <ul className="autocomplete" ref={this.searchRef}>
+            {searchResultItems}
+          </ul>
         )}
       </form>
     );

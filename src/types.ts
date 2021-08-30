@@ -3,7 +3,17 @@ import { DRINK_SELECTED } from './constants';
 //Store
 
 export interface ISelectedDrink {
-  selectedDrinkId: string,
+  selectDrink: {
+    selectedDrinkId: string,
+  }  
+}
+
+export interface IDrinkInfo {
+  data: []
+}
+
+export interface IDrinks {
+  drinks: [],
 }
 
 //Actions

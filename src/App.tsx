@@ -6,9 +6,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cocktails from "./components/Cocktails/Cocktails";
 import Header from "./components/Header/Header";
 import CocktailCard from "./components/CocktailCard/CocktailCard";
-import store from "./store";
+import configureStore from "./store";
 
 function App() {
+  const store = configureStore();
+
   return (
     <Provider store={store}>
       <Router>
