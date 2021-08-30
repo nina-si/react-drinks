@@ -5,15 +5,7 @@ import { connect } from "react-redux";
 import "./SearchForm.scss";
 
 import { SEARCH_COCKTAIL_ENDPOINT } from "../../constants";
-import { drinkSelected } from "../../actions";
-
-// type SearchState = {
-//   enteredValue: string;
-//   isSearchStarted: boolean;
-//   searchResults?:
-//     | [{ strDrink: string; strDrinkThumb: string; idDrink: string }]
-//     | [];
-// };
+import { drinkSelected } from "../../actions/select-drink";
 
 class SearchForm extends Component {
   constructor(props) {
@@ -50,7 +42,7 @@ class SearchForm extends Component {
     this.setState({ enteredValue: enteredText });
 
     if (enteredText.trim().length > 2) {
-      this.handleSearchTimer.bind(this);
+      this.handleSearchTimer();
       this.setState({ isSearchStarted: true });
       this.getDrinkByName(enteredText);
     } else {
@@ -68,7 +60,7 @@ class SearchForm extends Component {
     }
   }
 
-  handleSearchTimer() {
+  handleSearchTimer = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.setState({ isDropDownShown: true });
@@ -88,7 +80,7 @@ class SearchForm extends Component {
     });
   }
 
-  autocompleteClickHandler(e) {
+  autocompleteClickHandler = (e) => {
     this.props.drinkSelected(e.target.attributes.dataid.value);
     this.clearSearchInput();
     this.setState({
@@ -100,7 +92,7 @@ class SearchForm extends Component {
   }
 
   clearSearchInput() {
-    document.getElementById("search").value = "";
+    this.setState({enteredValue: ""});
   }
 
   render() {
@@ -113,7 +105,7 @@ class SearchForm extends Component {
             className="autocomplete-item"
             key={result.id}
             dataid={result.id}
-            onClick={this.autocompleteClickHandler.bind(this)}
+            onClick={this.autocompleteClickHandler}
           >
             {result.name}
           </Link>
@@ -127,8 +119,9 @@ class SearchForm extends Component {
           type="search"
           placeholder={`Type cocktail name here, i.e. margarita`}
           id="search"
+          value={this.state.enteredValue}
           className="search-input"
-          onChange={this.searchInputChangeHandler.bind(this)}
+          onChange={this.searchInputChangeHandler}
         />
         {this.state.isDropDownShown && !this.state.searchResults && (
           <ul className="autocomplete" ref={this.searchRef}>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { drinkSelected } from "../../actions";
+import { drinkSelected } from "../../actions/select-drink";
 
 import "./CocktailItem.scss";
 
@@ -26,8 +26,9 @@ class CocktailItem extends Component<ItemProps>{
     this.name = props.strDrink;
   }
 
-  cardClickHandler() {
-    this.props.drinkSelected(this.id);
+  cardClickHandler = () => {
+    console.log('Клик', this.props.idDrink);
+    this.props.drinkSelected(this.props.idDrink);
   }
 
   render() {
@@ -35,7 +36,7 @@ class CocktailItem extends Component<ItemProps>{
       <Link
         to={`/${this.id}`}
         className="cocktail-item"
-        onClick={this.cardClickHandler.bind(this)}
+        onClick={this.cardClickHandler}
       >
         <img src={`${this.img}`} alt={this.name} className="cocktailImg" />
         <h3>{this.name}</h3>

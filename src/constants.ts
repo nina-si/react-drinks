@@ -8,3 +8,11 @@ export const GET_COCKTAIL_INFO_ENDPOINT =
   "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
 export const DRINK_SELECTED = 'DRINK_SELECTED';
+
+export const DRINKS_LOADED = 'DRINKS_LOADED';
+
+export const ITEMS_HAS_ERROR = 'ITEMS_HAS_ERROR';
+
+export const ITEMS_IS_LOADING = 'ITEMS_IS_LOADING';
+
+export const ITEMS_FETCH_DATA_SUCCESS = 'ITEMS_FETCH_DATA_SUCCESS';

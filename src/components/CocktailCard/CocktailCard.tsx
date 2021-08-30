@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { GET_COCKTAIL_INFO_ENDPOINT } from "../../constants";
-import { drinkSelected } from "../../actions";
+import { drinkSelected } from "../../actions/select-drink";
 
 import "./CocktailCard.scss";
 import { ISelectedDrink } from "../../types";
@@ -25,7 +25,7 @@ class CocktailCard extends Component<CardProps, CardState> {
     super(props);
     this._isMounted = false;
     this.state = {
-      id: props.id,
+      id: this.props.id,
       name: "",
       imgUrl: "",
       description: "",
@@ -39,6 +39,7 @@ class CocktailCard extends Component<CardProps, CardState> {
       .then((res) => res.json())
       .then((data) =>
         this.setState({
+          id: this.props.id,
           name: data.drinks[0].strDrink,
           imgUrl: data.drinks[0].strDrinkThumb,
           description: data.drinks[0].strInstructions,
@@ -113,7 +114,7 @@ class CocktailCard extends Component<CardProps, CardState> {
 }
 
 const mapStateToProps = (state: ISelectedDrink) => {
-  return { id: state.selectedDrinkId };
+  return { id: state.selectDrink.selectedDrinkId };
 };
 
 const mapDispatchToProps = {
