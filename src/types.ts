@@ -8,6 +8,10 @@ export interface ISelectedDrink {
   }  
 }
 
+export interface IDrinkInfo {
+  data: []
+}
+
 export interface IDrinks {
   drinks: [],
 }

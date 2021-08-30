@@ -27,7 +27,6 @@ class CocktailItem extends Component<ItemProps>{
   }
 
   cardClickHandler = () => {
-    console.log('Клик', this.props.idDrink);
     this.props.drinkSelected(this.props.idDrink);
   }
 
