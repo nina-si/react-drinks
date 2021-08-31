@@ -37,7 +37,7 @@ class SearchForm extends Component {
       .then((results) => this.setState({ searchResults: results }));
   }
 
-  searchInputChangeHandler = async (e) => {
+  handleInputChange = async (e) => {
     const enteredText = e.target.value;
     this.setState({ enteredValue: enteredText });
 
@@ -66,7 +66,7 @@ class SearchForm extends Component {
       this.setState({ isDropDownShown: true });
       this.shiftFocus();
     }, 1000);
-  }
+  };
 
   shiftFocus() {
     const node = this.searchRef.current;
@@ -80,7 +80,7 @@ class SearchForm extends Component {
     });
   }
 
-  autocompleteClickHandler = (e) => {
+  handleAutocompleteClick = (e) => {
     this.props.drinkSelected(e.target.attributes.dataid.value);
     this.clearSearchInput();
     this.setState({
@@ -89,10 +89,10 @@ class SearchForm extends Component {
       isDropDownShown: false,
       searchResults: [],
     });
-  }
+  };
 
   clearSearchInput() {
-    this.setState({enteredValue: ""});
+    this.setState({ enteredValue: "" });
   }
 
   render() {
@@ -105,7 +105,7 @@ class SearchForm extends Component {
             className="autocomplete-item"
             key={result.id}
             dataid={result.id}
-            onClick={this.autocompleteClickHandler}
+            onClick={this.handleAutocompleteClick}
           >
             {result.name}
           </Link>
@@ -121,7 +121,7 @@ class SearchForm extends Component {
           id="search"
           value={this.state.enteredValue}
           className="search-input"
-          onChange={this.searchInputChangeHandler}
+          onChange={this.handleInputChange}
         />
         {this.state.isDropDownShown && !this.state.searchResults && (
           <ul className="autocomplete" ref={this.searchRef}>

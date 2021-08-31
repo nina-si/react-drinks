@@ -12,9 +12,9 @@ interface ItemProps extends PropsFromRedux {
   idDrink: string;
   strDrinkThumb: string;
   strDrink: string;
-};
+}
 
-class CocktailItem extends Component<ItemProps>{
+class CocktailItem extends Component<ItemProps> {
   name: string;
   img: string;
   id: string;
@@ -26,16 +26,16 @@ class CocktailItem extends Component<ItemProps>{
     this.name = props.strDrink;
   }
 
-  cardClickHandler = () => {
+  handleCardClick = () => {
     this.props.drinkSelected(this.props.idDrink);
-  }
+  };
 
   render() {
     return (
       <Link
         to={`/${this.id}`}
         className="cocktail-item"
-        onClick={this.cardClickHandler}
+        onClick={this.handleCardClick}
       >
         <img src={`${this.img}`} alt={this.name} className="cocktailImg" />
         <h3>{this.name}</h3>
