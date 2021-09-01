@@ -13,18 +13,19 @@ class CocktailsList extends Component {
 
   render() {
     if (this.props.hasError) {
-      return <p>Failed to load drinks</p>;
+      return <p className="message">Failed to load drinks</p>;
     }
 
     if (this.props.isLoading) {
-      return <p>Loading…</p>;
+      return <p className="message">Loading…</p>;
     }
 
     return (
       <div className="cocktails">
-        {this.props.items.drinks && this.props.items.drinks.map((cocktail) => {
-          return <CocktailItem key={cocktail.idDrink} {...cocktail} />;
-        })}
+        {this.props.items.drinks &&
+          this.props.items.drinks.map((cocktail) => {
+            return <CocktailItem key={cocktail.idDrink} {...cocktail} />;
+          })}
       </div>
     );
   }
@@ -40,7 +41,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (GET_COCKTAILS_ENDPOINT) => dispatch(fetchItemsData(GET_COCKTAILS_ENDPOINT)),
+    fetchData: (GET_COCKTAILS_ENDPOINT) =>
+      dispatch(fetchItemsData(GET_COCKTAILS_ENDPOINT)),
   };
 };
 

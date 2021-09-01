@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { GET_COCKTAIL_INFO_ENDPOINT } from "../../constants";
-import { itemFetchInfo } from "../../actions/thunks";
+import { fetchItemData } from "../../actions/thunks";
 
 import "./CocktailCard.scss";
 
 class CocktailCard extends Component {
+  private _isMounted: boolean;
   constructor(props) {
     super(props);
     this._isMounted = false;
@@ -14,20 +14,19 @@ class CocktailCard extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.props.fetchData(`${GET_COCKTAIL_INFO_ENDPOINT}${this.props.id}`);
+    this.props.fetchData(this.props.id);
   }
 
   componentDidUpdate() {
     this._isMounted = true;
-    this.props.fetchData(`${GET_COCKTAIL_INFO_ENDPOINT}${this.props.id}`);
+    this.props.fetchData(this.props.id);
   }
-  
+
   componentWillUnmount() {
     this._isMounted = false;
   }
 
   render() {
-
     return (
       <Fragment>
         {!this.props.data[0] && <p>Loading...</p>}
@@ -61,7 +60,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(itemFetchInfo(url)),
+    fetchData: (id: string) => dispatch(fetchItemData(id)),
   };
 };
 

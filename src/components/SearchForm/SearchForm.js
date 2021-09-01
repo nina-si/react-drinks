@@ -72,8 +72,10 @@ class SearchForm extends Component {
     node.addEventListener("keydown", (e) => {
       const active = document.activeElement;
       if (e.keyCode === 40 && active.nextSibling) {
+        e.preventDefault();
         active.nextSibling.focus();
       } else if (e.keyCode === 38 && active.previousSibling) {
+        e.preventDefault();
         active.previousSibling.focus();
       }
     });
