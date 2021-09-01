@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SearchForm from '../SearchForm/SearchForm'
+import { Search } from "../SearchForm/SearchForm";
 import { Link } from "react-router-dom";
 
 import "./Header.scss";
@@ -11,7 +11,7 @@ class Header extends Component {
         <Link to="/">
           <h1>Cocktails from all over the world</h1>
         </Link>
-        <SearchForm />
+        <Search />
       </header>
     );
   }

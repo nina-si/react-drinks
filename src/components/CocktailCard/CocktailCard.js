@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
 import { GET_COCKTAIL_INFO_ENDPOINT } from "../../constants";
-import { itemFetchInfo } from "../../thunks";
+import { itemFetchInfo } from "../../actions/thunks";
 
 import "./CocktailCard.scss";
 

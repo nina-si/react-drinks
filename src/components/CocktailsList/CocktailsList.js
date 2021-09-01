@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import CocktailItem from "../CocktailItem/CocktailItem";
 import { connect } from "react-redux";
-import { itemsFetchData } from "../../thunks";
+import { fetchItemsData } from "../../actions/thunks";
 import { GET_COCKTAILS_ENDPOINT } from "../../constants";
 
-import "./Cocktails.scss";
+import "./CocktailsList.scss";
 
-class Cocktails extends Component {
+class CocktailsList extends Component {
   componentDidMount() {
     this.props.fetchData(GET_COCKTAILS_ENDPOINT);
   }
@@ -40,8 +40,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (GET_COCKTAILS_ENDPOINT) => dispatch(itemsFetchData(GET_COCKTAILS_ENDPOINT)),
+    fetchData: (GET_COCKTAILS_ENDPOINT) => dispatch(fetchItemsData(GET_COCKTAILS_ENDPOINT)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cocktails);
+export default connect(mapStateToProps, mapDispatchToProps)(CocktailsList);

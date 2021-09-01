@@ -3,13 +3,12 @@ import "./App.scss";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Cocktails from "./components/Cocktails/Cocktails";
+import store from "./store";
+import CocktailsList from "./components/CocktailsList/CocktailsList";
 import Header from "./components/Header/Header";
 import CocktailCard from "./components/CocktailCard/CocktailCard";
-import configureStore from "./store";
 
 function App() {
-  const store = configureStore();
 
   return (
     <Provider store={store}>
@@ -17,7 +16,7 @@ function App() {
         <div className="App">
           <Header />
           <Switch>
-            <Route path="/" exact component={Cocktails} />
+            <Route path="/" exact component={CocktailsList} />
             <Route path="/:id" component={CocktailCard} />
           </Switch>
         </div>

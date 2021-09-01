@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import "./SearchForm.scss";
 
 import { SEARCH_COCKTAIL_ENDPOINT } from "../../constants";
+import { fetchSearchResults } from "../../actions/thunks";
 import { drinkSelected } from "../../actions/select-drink";
 
 class SearchForm extends Component {
@@ -16,26 +17,25 @@ class SearchForm extends Component {
       enteredValue: "",
       isSearchStarted: false,
       isDropDownShown: false,
-      searchResults: [],
     };
   }
 
-  getDrinkByName(text) {
-    fetch(`${SEARCH_COCKTAIL_ENDPOINT}${text}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.drinks === null) {
-          this.setState({ searchResults: [] });
-          return;
-        } else {
-          const results = data.drinks.map((drink) => {
-            return { id: drink.idDrink, name: drink.strDrink };
-          });
-          return results;
-        }
-      })
-      .then((results) => this.setState({ searchResults: results }));
-  }
+  // getDrinkByName(text) {
+  //   fetch(`${SEARCH_COCKTAIL_ENDPOINT}${text}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.drinks === null) {
+  //         this.setState({ searchResults: [] });
+  //         return;
+  //       } else {
+  //         const results = data.drinks.map((drink) => {
+  //           return { id: drink.idDrink, name: drink.strDrink };
+  //         });
+  //         return results;
+  //       }
+  //     })
+  //     .then((results) => this.setState({ searchResults: results }));
+  // }
 
   handleInputChange = async (e) => {
     const enteredText = e.target.value;
@@ -44,12 +44,11 @@ class SearchForm extends Component {
     if (enteredText.trim().length > 2) {
       this.handleSearchTimer();
       this.setState({ isSearchStarted: true });
-      this.getDrinkByName(enteredText);
+      this.props.fetchData(enteredText);
     } else {
       this.setState({
         isSearchStarted: false,
         isDropDownShown: false,
-        searchResults: [],
       });
     }
   };
@@ -97,17 +96,17 @@ class SearchForm extends Component {
 
   render() {
     let searchResultItems;
-    if (this.state.searchResults) {
-      searchResultItems = this.state.searchResults.map((result) => {
+    if (this.props.searchResults.length) {
+      searchResultItems = this.props.searchResults.map((result) => {
         return (
           <Link
-            to={`/${result.id}`}
+            to={`/${result.idDrink}`}
             className="autocomplete-item"
-            key={result.id}
-            dataid={result.id}
+            key={result.idDrink}
+            dataid={result.idDrink}
             onClick={this.handleAutocompleteClick}
           >
-            {result.name}
+            {result.strDrink}
           </Link>
         );
       });
@@ -123,12 +122,12 @@ class SearchForm extends Component {
           className="search-input"
           onChange={this.handleInputChange}
         />
-        {this.state.isDropDownShown && !this.state.searchResults && (
+        {this.state.isDropDownShown && !this.props.searchResults && (
           <ul className="autocomplete" ref={this.searchRef}>
             <li>No cocktail found</li>
           </ul>
         )}
-        {this.state.isDropDownShown && this.state.searchResults && (
+        {this.state.isDropDownShown && this.props.searchResults && (
           <ul className="autocomplete" ref={this.searchRef}>
             {searchResultItems}
           </ul>
@@ -138,8 +137,18 @@ class SearchForm extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  drinkSelected,
+const mapStateToProps = (state) => {
+  return {
+    isSearchStarted: state.search.searchStarted,
+    searchHasError: state.search.searchHasError,
+    searchResults: state.search.searchResults,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(SearchForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (text) => dispatch(fetchSearchResults(text)),
+  };
+};
+
+export const Search = connect(mapStateToProps, mapDispatchToProps)(SearchForm);

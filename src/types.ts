@@ -16,6 +16,20 @@ export interface IDrinks {
   drinks: [],
 }
 
+export interface ISearchStarted {
+  searchStarted: boolean,
+}
+
+export interface ISearchError {
+  searchError: boolean,
+}
+
+export interface ISearchResults {
+  searchResults: Array<{
+    
+  }>
+}
+
 //Actions
 
 export interface ISelectDrink {
