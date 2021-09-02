@@ -14,7 +14,7 @@ import {
 //Get items list
 
 export const fetchItemsData = () => {
-  return (dispatch) => {
+  return (dispatch: any) => {
     dispatch(itemsIsLoading(true));
 
     fetch(GET_COCKTAILS_ENDPOINT)
@@ -29,13 +29,19 @@ export const fetchItemsData = () => {
       })
       .then((response) => response.json())
       .then(({ drinks }) =>
-        drinks.map((item) => {
-          return {
-            id: item.idDrink,
-            name: item.strDrink,
-            img: item.strDrinkThumb,
-          };
-        })
+        drinks.map(
+          (item: {
+            idDrink: string;
+            strDrink: string;
+            strDrinkThumb: string;
+          }) => {
+            return {
+              id: item.idDrink,
+              name: item.strDrink,
+              img: item.strDrinkThumb,
+            };
+          }
+        )
       )
       .then((items) => dispatch(fetchItemsSuccess(items)))
       .catch(() => dispatch(itemsHasError(true)));
@@ -44,8 +50,16 @@ export const fetchItemsData = () => {
 
 // Get card info
 
-export const fetchItemData = (id) => {
-  return (dispatch) => {
+type CardItem = {
+  idDrink: string;
+  strDrink: string;
+  strGlass: string;
+  strDrinkThumb: string;
+  strInstructions: string;
+};
+
+export const fetchItemData = (id: string) => {
+  return (dispatch: any) => {
     dispatch(cardInfoIsLoading(true));
 
     fetch(`${GET_COCKTAIL_INFO_ENDPOINT}${id}`)
@@ -75,8 +89,8 @@ export const fetchItemData = (id) => {
 
 //Search by name
 
-export const fetchSearchResults = (text) => {
-  return (dispatch) => {
+export const fetchSearchResults = (text: string) => {
+  return (dispatch: any) => {
     dispatch(searchIsStarted(true));
 
     fetch(`${SEARCH_COCKTAIL_ENDPOINT}${text}`)
@@ -91,7 +105,7 @@ export const fetchSearchResults = (text) => {
       })
       .then((response) => response.json())
       .then(({ drinks }) =>
-        drinks.map((item) => {
+        drinks.map((item: { idDrink: string; strDrink: string }) => {
           return {
             id: item.idDrink,
             name: item.strDrink,
