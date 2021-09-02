@@ -1,0 +1,14 @@
+.cocktails {
+  margin: 0 auto;
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.message {
+  color: #fff;
+  font-size: 1.25rem;
+}

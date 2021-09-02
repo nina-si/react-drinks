@@ -1,14 +1,30 @@
-import React, { Component } from "react";
+import React, { Component, SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+import { fetchSearchResults } from "../../actions/thunks";
+import { drinkSelected, clearSearchResults } from "../../actions/actions";
+import { Item } from "../../types";
+
 import "./SearchForm.scss";
 
-import { SEARCH_COCKTAIL_ENDPOINT } from "../../constants";
-import { drinkSelected } from "../../actions/select-drink";
+type PropsFromRedux = typeof mapDispatchToProps;
 
-class SearchForm extends Component {
-  constructor(props) {
+interface SearchProps extends PropsFromRedux {
+  dataId: string;
+  searchResults: Item[];
+}
+
+interface SearchState {
+  enteredValue: string;
+  isSearchStarted: boolean;
+  isDropDownShown: boolean;
+}
+
+class SearchForm extends Component<SearchProps, SearchState> {
+  searchRef: React.RefObject<HTMLUListElement>;
+  timer: any;
+  constructor(props: SearchProps) {
     super(props);
     this.timer = null;
     this.searchRef = React.createRef();
@@ -16,45 +32,26 @@ class SearchForm extends Component {
       enteredValue: "",
       isSearchStarted: false,
       isDropDownShown: false,
-      searchResults: [],
     };
   }
 
-  getDrinkByName(text) {
-    fetch(`${SEARCH_COCKTAIL_ENDPOINT}${text}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.drinks === null) {
-          this.setState({ searchResults: [] });
-          return;
-        } else {
-          const results = data.drinks.map((drink) => {
-            return { id: drink.idDrink, name: drink.strDrink };
-          });
-          return results;
-        }
-      })
-      .then((results) => this.setState({ searchResults: results }));
-  }
-
-  searchInputChangeHandler = async (e) => {
+  handleInputChange = async (e: SyntheticEvent) => {
     const enteredText = e.target.value;
     this.setState({ enteredValue: enteredText });
 
     if (enteredText.trim().length > 2) {
       this.handleSearchTimer();
       this.setState({ isSearchStarted: true });
-      this.getDrinkByName(enteredText);
+      this.props.fetchData(enteredText);
     } else {
       this.setState({
         isSearchStarted: false,
         isDropDownShown: false,
-        searchResults: [],
       });
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevState) {
     if (prevState.enteredValue !== this.state.enteredValue) {
       this.handleSearchTimer();
     }
@@ -63,49 +60,50 @@ class SearchForm extends Component {
   handleSearchTimer = () => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.setState({ isDropDownShown: true });
-      this.shiftFocus();
+      if (this.state.enteredValue.trim().length > 2) {
+        this.setState({ isDropDownShown: true });
+        this.shiftFocus();
+      }
     }, 1000);
-  }
+  };
 
   shiftFocus() {
     const node = this.searchRef.current;
     node.addEventListener("keydown", (e) => {
       const active = document.activeElement;
       if (e.keyCode === 40 && active.nextSibling) {
+        e.preventDefault();
         active.nextSibling.focus();
       } else if (e.keyCode === 38 && active.previousSibling) {
+        e.preventDefault();
         active.previousSibling.focus();
       }
     });
   }
 
-  autocompleteClickHandler = (e) => {
-    this.props.drinkSelected(e.target.attributes.dataid.value);
-    this.clearSearchInput();
+  handleAutocompleteClick = (e: SyntheticEvent) => {
+    this.props.onSelect(e.target.dataset.id);
+    this.props.clearResults();
     this.setState({
       enteredValue: "",
       isSearchStarted: false,
       isDropDownShown: false,
-      searchResults: [],
     });
-  }
-
-  clearSearchInput() {
-    this.setState({enteredValue: ""});
-  }
+  };
 
   render() {
+    let results = this.props.searchResults;
+    let isAutocompleted = this.state.isDropDownShown;
     let searchResultItems;
-    if (this.state.searchResults) {
-      searchResultItems = this.state.searchResults.map((result) => {
+    if (isAutocompleted && results) {
+      searchResultItems = this.props.searchResults.map((result) => {
         return (
           <Link
             to={`/${result.id}`}
             className="autocomplete-item"
             key={result.id}
-            dataid={result.id}
-            onClick={this.autocompleteClickHandler}
+            data-id={result.id}
+            onClick={this.handleAutocompleteClick}
           >
             {result.name}
           </Link>
@@ -121,14 +119,14 @@ class SearchForm extends Component {
           id="search"
           value={this.state.enteredValue}
           className="search-input"
-          onChange={this.searchInputChangeHandler}
+          onChange={this.handleInputChange}
         />
-        {this.state.isDropDownShown && !this.state.searchResults && (
+        {isAutocompleted && !results && (
           <ul className="autocomplete" ref={this.searchRef}>
             <li>No cocktail found</li>
           </ul>
         )}
-        {this.state.isDropDownShown && this.state.searchResults && (
+        {isAutocompleted && results && (
           <ul className="autocomplete" ref={this.searchRef}>
             {searchResultItems}
           </ul>
@@ -138,8 +136,21 @@ class SearchForm extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  drinkSelected,
+const mapStateToProps = (state: any) => {
+  return {
+    isSearchStarted: state.search.searchStarted,
+    searchHasError: state.search.searchHasError,
+    searchResults: state.search.searchResults,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(SearchForm);
+const mapDispatchToProps = {
+  fetchData: fetchSearchResults,
+  clearResults: clearSearchResults,
+  onSelect: drinkSelected,
+};
+
+export const Search = connect<any, any, SearchProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchForm);
