@@ -5,8 +5,20 @@ import { fetchItemData } from "../../actions/thunks";
 
 import "./CocktailCard.scss";
 
-class CocktailCard extends Component {
+type PropsFromRedux = typeof mapDispatchToProps;
+
+interface ItemProps extends PropsFromRedux {
+  id: string;
+  data: {
+    name: string;
+    img: string;
+    details: string;
+  };
+}
+
+class CocktailCard extends Component<ItemProps> {
   private _isMounted: boolean;
+
   constructor(props) {
     super(props);
     this._isMounted = false;
@@ -55,7 +67,7 @@ class CocktailCard extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   return { id: state.selectedDrink, data: state.data };
 };
 
@@ -63,4 +75,4 @@ const mapDispatchToProps = {
   fetchCardData: fetchItemData,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CocktailCard);
+export const Card = connect(mapStateToProps, mapDispatchToProps)(CocktailCard);

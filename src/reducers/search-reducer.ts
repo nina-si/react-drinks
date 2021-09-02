@@ -5,13 +5,15 @@ import {
   CLEAR_SEARCH_RESULTS,
 } from "../constants";
 
+import { ISearchActions } from "../types";
+
 const initialState = {
   searchStarted: false,
   searchError: false,
   searchResults: null,
 };
 
-export const search = (state = initialState, action) => {
+export const search = (state = initialState, action: ISearchActions) => {
   switch (action.type) {
     case SEARCH_STARTED:
       return { ...state, searchStarted: action.payload };

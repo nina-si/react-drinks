@@ -1,13 +1,30 @@
-import React, { Component } from "react";
+import React, { Component, SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { fetchSearchResults } from "../../actions/thunks";
 import { drinkSelected, clearSearchResults } from "../../actions/actions";
+import { Item } from "../../types";
+
 import "./SearchForm.scss";
 
-class SearchForm extends Component {
-  constructor(props) {
+type PropsFromRedux = typeof mapDispatchToProps;
+
+interface SearchProps extends PropsFromRedux {
+  dataId: string;
+  searchResults: Item[];
+}
+
+interface SearchState {
+  enteredValue: string;
+  isSearchStarted: boolean;
+  isDropDownShown: boolean;
+}
+
+class SearchForm extends Component<SearchProps, SearchState> {
+  searchRef: React.RefObject<HTMLUListElement>;
+  timer: any;
+  constructor(props: SearchProps) {
     super(props);
     this.timer = null;
     this.searchRef = React.createRef();
@@ -18,7 +35,7 @@ class SearchForm extends Component {
     };
   }
 
-  handleInputChange = async (e) => {
+  handleInputChange = async (e: SyntheticEvent) => {
     const enteredText = e.target.value;
     this.setState({ enteredValue: enteredText });
 
@@ -34,7 +51,7 @@ class SearchForm extends Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevState) {
     if (prevState.enteredValue !== this.state.enteredValue) {
       this.handleSearchTimer();
     }
@@ -64,8 +81,8 @@ class SearchForm extends Component {
     });
   }
 
-  handleAutocompleteClick = (e) => {
-    this.props.onSelect(e.target.attributes.dataid.value);
+  handleAutocompleteClick = (e: SyntheticEvent) => {
+    this.props.onSelect(e.target.dataset.id);
     this.props.clearResults();
     this.setState({
       enteredValue: "",
@@ -85,7 +102,7 @@ class SearchForm extends Component {
             to={`/${result.id}`}
             className="autocomplete-item"
             key={result.id}
-            dataid={result.id}
+            data-id={result.id}
             onClick={this.handleAutocompleteClick}
           >
             {result.name}
@@ -119,7 +136,7 @@ class SearchForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   return {
     isSearchStarted: state.search.searchStarted,
     searchHasError: state.search.searchHasError,
@@ -133,4 +150,7 @@ const mapDispatchToProps = {
   onSelect: drinkSelected,
 };
 
-export const Search = connect(mapStateToProps, mapDispatchToProps)(SearchForm);
+export const Search = connect<any, any, SearchProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchForm);

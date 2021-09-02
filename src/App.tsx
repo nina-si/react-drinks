@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import store from "./store";
 import { Listing } from "./components/CocktailsList/CocktailsList";
 import Header from "./components/Header/Header";
-import CocktailCard from "./components/CocktailCard/CocktailCard";
+import { Card } from "./components/CocktailCard/CocktailCard";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Header />
           <Switch>
             <Route path="/" exact component={Listing} />
-            <Route path="/:id" component={CocktailCard} />
+            <Route path="/:id" component={Card} />
           </Switch>
         </div>
       </Router>

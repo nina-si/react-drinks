@@ -50,14 +50,6 @@ export const fetchItemsData = () => {
 
 // Get card info
 
-type CardItem = {
-  idDrink: string;
-  strDrink: string;
-  strGlass: string;
-  strDrinkThumb: string;
-  strInstructions: string;
-};
-
 export const fetchItemData = (id: string) => {
   return (dispatch: any) => {
     dispatch(cardInfoIsLoading(true));

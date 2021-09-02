@@ -1,4 +1,3 @@
-import { StringDecoder } from "string_decoder";
 import {
   SEARCH_STARTED,
   SEARCH_HAS_ERROR,
@@ -19,7 +18,7 @@ export type Drink = string;
 export interface Item {
   id: string;
   name: string;
-  img?: string;
+  img: string;
 }
 
 export interface ICardData {
@@ -95,3 +94,11 @@ export interface ISelectDrink {
   type: typeof DRINK_SELECTED;
   payload: Drink;
 }
+
+export type IListActions = ItemsLoading | ItemsError | ItemsData;
+export type ICardActions = ICardLoading | ICardError | ICardInfoSucces;
+export type ISearchActions =
+  | ISearchStarted
+  | ISearchError
+  | ISearchSuccess
+  | IClearSearch;

@@ -3,8 +3,9 @@ import {
   ITEMS_FETCH_DATA_SUCCESS,
   ITEMS_HAS_ERROR,
 } from "../constants";
+import { IListActions } from "../types";
 
-export const itemsIsLoading = (state = false, action) => {
+export const itemsIsLoading = (state = false, action: IListActions) => {
   switch (action.type) {
     case ITEMS_IS_LOADING:
       return action.isItemsLoading;
@@ -14,7 +15,7 @@ export const itemsIsLoading = (state = false, action) => {
   }
 };
 
-export const itemsHasError = (state = false, action) => {
+export const itemsHasError = (state = false, action: IListActions) => {
   switch (action.type) {
     case ITEMS_HAS_ERROR:
       return action.itemsFetchError;
@@ -24,7 +25,7 @@ export const itemsHasError = (state = false, action) => {
   }
 };
 
-export const items = (state = [], action) => {
+export const items = (state = [], action: IListActions) => {
   switch (action.type) {
     case ITEMS_FETCH_DATA_SUCCESS:
       return action.items;

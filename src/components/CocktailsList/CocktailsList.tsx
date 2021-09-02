@@ -2,10 +2,23 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { fetchItemsData } from "../../actions/thunks";
-import CocktailItem from "../CocktailItem/CocktailItem";
+import { DrinkItem } from "../CocktailItem/CocktailItem";
+import { Item } from "../../types";
+
 import "./CocktailsList.scss";
 
-class CocktailsList extends Component {
+type PropsFromRedux = typeof mapDispatchToProps;
+
+interface ListProps extends PropsFromRedux {
+  id: string;
+  name: string;
+  img: string;
+  hasError: boolean;
+  isLoading: boolean;
+  items: Item[];
+}
+
+class CocktailsList extends Component<ListProps> {
   componentDidMount() {
     this.props.fetchData();
   }
@@ -23,14 +36,14 @@ class CocktailsList extends Component {
       <div className="cocktails">
         {this.props.items &&
           this.props.items.map((cocktail) => {
-            return <CocktailItem key={cocktail.id} {...cocktail} />;
+            return <DrinkItem key={cocktail.id} {...cocktail} />;
           })}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   return {
     items: state.items,
     hasError: state.itemsHasError,
@@ -42,7 +55,7 @@ const mapDispatchToProps = {
   fetchData: fetchItemsData,
 };
 
-export const Listing = connect(
+export const Listing = connect<any, any, ListProps>(
   mapStateToProps,
   mapDispatchToProps
 )(CocktailsList);

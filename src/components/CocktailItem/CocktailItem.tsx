@@ -41,4 +41,4 @@ const mapDispatchToProps = {
   drinkSelected,
 };
 
-export default connect(null, mapDispatchToProps)(CocktailItem);
+export const DrinkItem = connect(null, mapDispatchToProps)(CocktailItem);
