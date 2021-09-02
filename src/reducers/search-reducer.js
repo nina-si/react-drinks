@@ -1,9 +1,14 @@
-import { SEARCH_STARTED, SEARCH_HAS_ERROR, SEARCH_SUCCESS } from "../constants";
+import {
+  SEARCH_STARTED,
+  SEARCH_HAS_ERROR,
+  SEARCH_SUCCESS,
+  CLEAR_SEARCH_RESULTS,
+} from "../constants";
 
 const initialState = {
   searchStarted: false,
   searchError: false,
-  searchResults: [],
+  searchResults: null,
 };
 
 export const search = (state = initialState, action) => {
@@ -16,6 +21,9 @@ export const search = (state = initialState, action) => {
 
     case SEARCH_SUCCESS:
       return { ...state, searchResults: action.payload };
+
+    case CLEAR_SEARCH_RESULTS:
+      return action.payload;
 
     default:
       return state;

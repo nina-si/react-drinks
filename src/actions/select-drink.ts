@@ -1,9 +1,0 @@
-import { DRINK_SELECTED } from "../constants";
-import { ISelectDrink } from "../types";
-
-export const drinkSelected = (drinkId: string):ISelectDrink => {
-  return {
-    type: DRINK_SELECTED,
-    payload: drinkId,
-  };
-};

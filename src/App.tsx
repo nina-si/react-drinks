@@ -4,19 +4,18 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import store from "./store";
-import CocktailsList from "./components/CocktailsList/CocktailsList";
+import { Listing } from "./components/CocktailsList/CocktailsList";
 import Header from "./components/Header/Header";
 import CocktailCard from "./components/CocktailCard/CocktailCard";
 
 function App() {
-
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
           <Header />
           <Switch>
-            <Route path="/" exact component={CocktailsList} />
+            <Route path="/" exact component={Listing} />
             <Route path="/:id" component={CocktailCard} />
           </Switch>
         </div>

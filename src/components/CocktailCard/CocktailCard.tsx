@@ -10,16 +10,21 @@ class CocktailCard extends Component {
   constructor(props) {
     super(props);
     this._isMounted = false;
+    this.state = {
+      id: this.props.id,
+    };
   }
 
   componentDidMount() {
     this._isMounted = true;
-    this.props.fetchData(this.props.id);
+    this.props.fetchCardData(this.props.id);
   }
 
-  componentDidUpdate() {
-    this._isMounted = true;
-    this.props.fetchData(this.props.id);
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
+      this._isMounted = true;
+      this.props.fetchCardData(this.props.id);
+    }
   }
 
   componentWillUnmount() {
@@ -27,24 +32,20 @@ class CocktailCard extends Component {
   }
 
   render() {
+    const { name, img, details } = this.props.data;
     return (
       <Fragment>
-        {!this.props.data[0] && <p>Loading...</p>}
-        {this.props.data[0] && (
+        {!name && <p>Loading...</p>}
+        {name && (
           <div>
-            <h2 className="cocktail-card-name">
-              Коктейль {this.props.data[0].strDrink}
-            </h2>
+            <h2 className="cocktail-card-name">Коктейль {name}</h2>
             <div className="cocktail-card-container">
               <div className="cocktail-picture">
-                <img
-                  src={this.props.data[0].strDrinkThumb}
-                  alt={this.props.data[0].strDrink}
-                />
+                <img src={img} alt={name} />
               </div>
               <div className="cocktail-info">
-                <h3>Description:</h3>
-                <p>{this.props.data[0].strInstructions}</p>
+                <h3>Instructions:</h3>
+                <p>{details}</p>
               </div>
             </div>
           </div>
@@ -55,13 +56,11 @@ class CocktailCard extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { id: state.selectDrink.selectedDrinkId, data: state.data };
+  return { id: state.selectedDrink, data: state.data };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchData: (id: string) => dispatch(fetchItemData(id)),
-  };
+const mapDispatchToProps = {
+  fetchCardData: fetchItemData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CocktailCard);

@@ -1,11 +1,10 @@
+import { bindActionCreators } from "redux";
 import { DRINK_SELECTED } from "../constants";
 
-export const selectDrink = (state = "", { type, payload }) => {
+export const selectedDrink = (state = "", { type, payload }) => {
   switch (type) {
     case DRINK_SELECTED:
-      return {
-        selectedDrinkId: payload,
-      };
+      return payload;
     default:
       return state;
   }
